@@ -1,0 +1,129 @@
+Nome: Alisson Chabaribery
+RM: 81472
+
+**************** PASSO 1 ******************
+
+Criação do repositório
+
+
+**************** PASSO 2 ******************
+
+Criação da classe JUNIT Teste
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class JulgamentoPrisioneiroTest{
+
+	@Test
+	void test() {
+		fail("Not yet implemented");
+	}
+
+}
+
+
+**************** PASSO 3 ******************
+Aconteceram erros de compilação porque não foi encontrado a classe Resposta. 
+Log de erro: 
+"The method calculaPena(Resposta, Resposta) from the type JulgamentoPrisioneiro refers to the missing type Resposta" 
+
+**************** PASSO 4 ******************
+
+Dado o erro anterior, foi criado um Enum:
+ 
+public enum Resposta {
+	DELACAO
+}
+
+**************** PASSO 5 ******************
+
+Implementação dos métodos de testes e correções dos testes.
+
+**************** PASSO 6 ******************
+
+Finalização da classe:
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Assert;
+import org.junit.jupiter.api.Test;
+
+class JulgamentoPrisioneiroTest {
+   private final int PENA_INOCENCIA = 10;
+   private final int PENA_CONDENACAO_MUTUA = 15;
+   private final int PENA_CONDENACAO_INDIVIDUAL = 10;
+   private final int PENA_CONDENACAO_CUMPLICES = 11;
+
+	@Test
+	void deveTerPenaCondenacaoMutua() {
+		JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+		Resposta respostaPrisioneiroA = Resposta.DELACAO;
+		Resposta respostaPrisioneiroB = Resposta.DELACAO;
+		int pena = jp.calculaPena(respostaPrisioneiroA, respostaPrisioneiroB);
+		Assert.assertEquals(pena, PENA_CONDENACAO_MUTUA);
+	}
+
+
+	@Test
+	void deveTerPenaInocencia() {
+		JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+		Resposta respostaPrisioneiroA = Resposta.INOCENTE;
+		Resposta respostaPrisioneiroB = Resposta.INOCENTE;
+		int pena = jp.calculaPena(respostaPrisioneiroA, respostaPrisioneiroB);
+		Assert.assertEquals(pena, PENA_INOCENCIA);
+	}
+	
+
+	@Test
+	void deveTerPenaCondenacaoIndividual() {
+		JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+		Resposta respostaPrisioneiroA = Resposta.DELACAO;
+		Resposta respostaPrisioneiroB = Resposta.INOCENTE;
+		int pena = jp.calculaPena(respostaPrisioneiroA, respostaPrisioneiroB);
+		Assert.assertEquals(pena, PENA_CONDENACAO_INDIVIDUAL);
+	}
+	
+
+	@Test
+	void deveTerPenaCondenacaoCumplices() {
+		JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+		Resposta respostaPrisioneiroA = Resposta.INOCENTE;
+		Resposta respostaPrisioneiroB = Resposta.DELACAO;
+		int pena = jp.calculaPena(respostaPrisioneiroA, respostaPrisioneiroB);
+		Assert.assertEquals(pena, PENA_CONDENACAO_CUMPLICES);
+	}
+	
+	
+	
+}
+
+Versão final da classe JulgamentoPrisioneiro corrigida:
+
+public class JulgamentoPrisioneiro {
+   private int PENA_INOCENCIA = 10;
+   private int PENA_CONDENACAO_MUTUA = 15;
+   private int PENA_CONDENACAO_INDIVIDUAL = 10;
+   private int PENA_CONDENACAO_CUMPLICES = 11;
+
+   public int calculaPena(Resposta respostaPrisioneiroA, Resposta respostaPrisioneiroB) {
+      if (respostaPrisioneiroA == Resposta.DELACAO) {
+          if (respostaPrisioneiroB == Resposta.DELACAO) {
+            return PENA_CONDENACAO_MUTUA;
+          } else {
+                 return PENA_CONDENACAO_INDIVIDUAL;
+                 }
+       } else {
+                if (respostaPrisioneiroB == Resposta.DELACAO) {
+                    return PENA_CONDENACAO_CUMPLICES;
+                } else {
+                         return PENA_INOCENCIA;
+                        }
+                }
+     }
+}
+**************************
+OBSERVAÇÕES
+**************************
+
+Foi usado a versão 5 do JUNIT.
